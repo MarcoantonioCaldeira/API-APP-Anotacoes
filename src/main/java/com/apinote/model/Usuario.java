@@ -17,13 +17,15 @@ public class Usuario implements Serializable {
     private String nome;
     private String email;
     private String senha;
+    private String confirmacaoSenha;
     @OneToMany(mappedBy = "usuario")
     private List<Nota> notas = new ArrayList<>();
 
-    public Usuario(String nome, String email, String senha, List<Nota> notas) {
+    public Usuario(String nome, String email, String senha, String confirmacaoSenha, List<Nota> notas) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
+        this.confirmacaoSenha = confirmacaoSenha;
         this.notas = notas;
     }
 
@@ -42,7 +44,7 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "nome_usuario")
+    @Column(name = "nome_usuario", nullable = false)
     public String getNome() {
         return nome;
     }
@@ -51,7 +53,7 @@ public class Usuario implements Serializable {
         this.nome = nome;
     }
 
-    @Column(name = "email_usuario")
+    @Column(name = "email_usuario", nullable = false)
     public String getEmail() {
         return email;
     }
@@ -60,7 +62,7 @@ public class Usuario implements Serializable {
         this.email = email;
     }
 
-    @Column(name = "senha_usuario")
+    @Column(name = "senha_usuario", nullable = false)
     public String getSenha() {
         return senha;
     }
@@ -69,7 +71,16 @@ public class Usuario implements Serializable {
         this.senha = senha;
     }
 
-    @Column(name = "notas_usuario")
+    @Column(name = "confirmar_senha_usuario", nullable = false)
+    public String getConfirmacaoSenha() {
+        return confirmacaoSenha;
+    }
+
+    public void setConfirmacaoSenha(String confirmacaoSenha) {
+        this.confirmacaoSenha = confirmacaoSenha;
+    }
+
+    @Column(name = "notas_usuario", nullable = false)
     public List<Nota> getNotas() {
         return notas;
     }
