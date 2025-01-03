@@ -1,5 +1,6 @@
 package com.apinote.controller;
 
+import com.apinote.model.Nota;
 import com.apinote.model.Usuario;
 import com.apinote.service.UsuarioService;
 import jakarta.websocket.server.PathParam;
@@ -9,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,12 +24,12 @@ public class UsuarioController {
         consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
         produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public  ResponseEntity<Object> criarUsuario(@RequestBody Usuario usuario) {
-        Usuario usuario1 = usuarioService.criarUsuario(usuario);
+        Usuario usuarioCriado  = usuarioService.criarUsuario(usuario);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 Map.of(
                         "mensagem", "Conexão bem-sucedida! Usuário criado com sucesso.",
-                        "dados", usuario1
+                        "dados", usuarioCriado
                 )
         );
     }
@@ -40,5 +42,11 @@ public class UsuarioController {
                         "mensagem", "Conexão bem-sucedida! Usuário deletado com sucesso."
                 )
         );
+    }
+
+    @GetMapping(value = "/listar",
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public List<Usuario> listarUsuario() {
+        return usuarioService.listarUsuario();
     }
 }

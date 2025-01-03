@@ -1,11 +1,10 @@
 package com.apinote.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "usuario")
@@ -13,29 +12,30 @@ public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
     private Long id;
     private String nome;
     private String email;
     private String senha;
     private String confirmacaoSenha;
-    @OneToMany(mappedBy = "usuario")
-    private List<Nota> notas = new ArrayList<>();
 
-    public Usuario(String nome, String email, String senha, String confirmacaoSenha, List<Nota> notas) {
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<Nota> notas = new HashSet<>();
+
+    public Usuario(String nome, String email, String senha, String confirmacaoSenha) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.confirmacaoSenha = confirmacaoSenha;
-        this.notas = notas;
     }
 
     public Usuario(){
 
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario")
     public Long getId() {
         return id;
     }
@@ -80,12 +80,12 @@ public class Usuario implements Serializable {
         this.confirmacaoSenha = confirmacaoSenha;
     }
 
-    @Column(name = "notas_usuario", nullable = false)
-    public List<Nota> getNotas() {
+    @Column(name = "notas_usuario")
+    public Set<Nota> getNotas() {
         return notas;
     }
 
-    public void setNotas(List<Nota> notas) {
+    public void setNotas(Set<Nota> notas) {
         this.notas = notas;
     }
 
@@ -105,6 +105,11 @@ public class Usuario implements Serializable {
 
         Usuario other = (Usuario) obj;
         return Objects.equals(id, other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

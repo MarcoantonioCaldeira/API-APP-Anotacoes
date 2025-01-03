@@ -5,7 +5,8 @@ import com.apinote.model.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -26,5 +27,15 @@ public class UsuarioService {
         } catch (Exception e) {
             System.out.println("Erro ao deletar usuário: " + e.getMessage());
         }
+    }
+
+    public List<Usuario> listarUsuario() {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        return usuarios;
+    }
+
+    public Usuario buscarUsuarioPorId(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + id));
     }
 }
