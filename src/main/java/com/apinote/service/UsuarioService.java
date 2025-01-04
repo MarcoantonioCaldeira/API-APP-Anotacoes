@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -17,6 +18,14 @@ public class UsuarioService {
 
     @Transactional
     public Usuario criarUsuario(Usuario usuario) {
+        Optional<Usuario> emailusuario = usuarioRepository.findByEmail(usuario.getEmail());
+
+        for(Usuario u : usuarioRepository.findAll()) {
+            if(u.getEmail().equals(usuario.getEmail())) {
+                throw new RuntimeException("Email já cadastrado");
+            }
+        }
+
         return usuarioRepository.save(usuario);
     }
 

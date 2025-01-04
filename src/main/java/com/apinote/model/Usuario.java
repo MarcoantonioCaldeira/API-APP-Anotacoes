@@ -1,10 +1,19 @@
 package com.apinote.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.CascadeType;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuario")
@@ -23,7 +32,7 @@ public class Usuario implements Serializable {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private Set<Nota> notas = new HashSet<>();
+    private Set<Bloco> blocos = new HashSet<>();
 
     public Usuario(String nome, String email, String senha, String confirmacaoSenha) {
         this.nome = nome;
@@ -80,13 +89,13 @@ public class Usuario implements Serializable {
         this.confirmacaoSenha = confirmacaoSenha;
     }
 
-    @Column(name = "notas_usuario")
-    public Set<Nota> getNotas() {
-        return notas;
+    @Column(name = "blocos_usuario")
+    public Set<Bloco> getBlocos() {
+        return blocos;
     }
 
-    public void setNotas(Set<Nota> notas) {
-        this.notas = notas;
+    public void setBlocos(Set<Bloco> blocos) {
+        this.blocos = blocos;
     }
 
     @Override

@@ -1,9 +1,10 @@
 package com.apinote.service;
 
+import com.apinote.model.Bloco;
 import com.apinote.model.Nota;
 import com.apinote.model.Usuario;
+import com.apinote.model.repository.BlocoRepository;
 import com.apinote.model.repository.NotaRepository;
-import com.apinote.model.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,21 +19,18 @@ public class NotaService {
     NotaRepository notaRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private BlocoRepository blocoRepository;
 
     public Nota criarNota(Nota nota) {
-        // Verificar se o usuário existe
-        if (nota.getUsuario() == null || nota.getUsuario().getId() == null) {
-            throw new IllegalArgumentException("O ID do usuário deve ser informado.");
+        if (nota.getBloco() == null || nota.getBloco().getId() == null) {
+            throw new IllegalArgumentException("O ID do bloco deve ser informado.");
         }
 
-        Usuario usuario = usuarioRepository.findById(nota.getUsuario().getId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        Bloco bloco = blocoRepository.findById(nota.getBloco().getId())
+                .orElseThrow(() -> new RuntimeException("Bloco não encontrado"));
 
-        // Associar o usuário à nota
-        nota.setUsuario(usuario);
+        nota.setBloco(bloco);
 
-        // Salvar a nota
         return notaRepository.save(nota);
     }
 

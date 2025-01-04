@@ -1,13 +1,29 @@
 package com.apinote.model;
 
-import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.CascadeType;
+import jakarta. persistence. ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta. persistence. FetchType;
+import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name="bloco")
-public class Bloco {
+public class Bloco implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,12 +32,19 @@ public class Bloco {
     private String titulo;
     private String descricao;
 
-    private Set<Nota> notas = new HashSet<>();;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id_usuario")
+    @JsonBackReference
+    private Usuario usuario;
 
-    public Bloco(Long id, String titulo, String descricao, Set<Nota> notas) {
+    @OneToMany(mappedBy = "bloco", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<Nota> notas = new HashSet<>();
+
+    public Bloco(Long id, String titulo, Usuario usuario, Set<Nota> notas) {
         this.id = id;
         this.titulo = titulo;
-        this.descricao = descricao;
+        this.usuario = usuario;
         this.notas = notas;
     }
 
@@ -64,4 +87,35 @@ public class Bloco {
         this.notas = notas;
     }
 
+    @Column(name = "notas_bloco")
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+
+            return true;
+
+        if (obj == null)
+
+            return false;
+
+        if (getClass() != obj.getClass())
+
+            return false;
+
+        Bloco other = (Bloco) obj;
+        return Objects.equals(id, other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

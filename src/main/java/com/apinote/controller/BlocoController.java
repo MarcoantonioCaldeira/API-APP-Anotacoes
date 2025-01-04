@@ -1,9 +1,9 @@
 package com.apinote.controller;
 
 import com.apinote.model.Bloco;
-import com.apinote.model.Nota;
+import com.apinote.model.Usuario;
 import com.apinote.service.BlocoService;
-import com.apinote.service.NotaService;
+import com.apinote.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,43 +18,42 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "rest/nota")
-public class NotaController {
-
-    @Autowired
-    NotaService notaService;
-
+@RequestMapping(value = "rest/usuarios/bloco")
+public class BlocoController {
     @Autowired
     BlocoService blocoService;
+
+    @Autowired
+    UsuarioService usuarioService;
 
     @RequestMapping(value = "/criar",
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public ResponseEntity<Object> criarNota(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<Object> criarBloco(@RequestBody Map<String, Object> payload) {
         try {
             String titulo = (String) payload.get("titulo");
             String descricao = (String) payload.get("descricao");
-            Long blocoId = Long.valueOf((Integer) payload.get("bloco_id"));
+            Long usuarioId = Long.valueOf((Integer) payload.get("usuario_id"));
 
-            Bloco bloco = blocoService.buscarBlocoPorId(blocoId);
+            Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
 
-            Nota nota = new Nota();
-            nota.setTitulo(titulo);
-            nota.setDescricao(descricao);
-            nota.setBloco(bloco);
+            Bloco bloco = new Bloco();
+            bloco.setTitulo(titulo);
+            bloco.setDescricao(descricao);
+            bloco.setUsuario(usuario);
 
-            Nota notaCriada = notaService.criarNota(nota);
+            Bloco blocoCriado = blocoService.criarBloco(bloco);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     Map.of(
-                            "mensagem", "Nota criada com sucesso!",
-                            "dados", notaCriada
+                            "mensagem", "Bloco criado com sucesso!",
+                            "dados", blocoCriado
                     )
             );
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     Map.of(
-                            "erro", "Erro ao criar a nota: " + e.getMessage()
+                            "erro", "Erro ao criar a bloco: " + e.getMessage()
                     )
             );
         }
@@ -63,28 +62,28 @@ public class NotaController {
 
     @RequestMapping(value = "/atualizar/{id}",
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public  ResponseEntity<?> atualizarNota(@PathVariable Long id, @RequestBody Nota nota) {
-        Nota notas = notaService.atualizarNota(id, nota);
+    public  ResponseEntity<?> atualizarNota(@PathVariable Long id, @RequestBody Bloco bloco) {
+        Bloco blocos = blocoService.atualizarBloco(id, bloco);
         return ResponseEntity.ok().body(
                 Map.of(
-                        "mensagem", "Conexão bem-sucedida! Nota atualizada com sucesso.",
-                        "dados", notas
+                        "mensagem", "Conexão bem-sucedida! Bloco atualizado com sucesso.",
+                        "dados", blocos
                 )
         );
     }
 
     @RequestMapping(value = "/listar",
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public List<Nota> listarNotas() {
-        return notaService.listarNotas();
+    public List<Bloco> listarBlocos() {
+        return blocoService.listarBloco();
     }
 
     @DeleteMapping(value = "/deletar/{id}")
-    public ResponseEntity<?> deletarNota(@PathVariable("id") Long id) {
-        notaService.deletarNota(id);
+    public ResponseEntity<?> deletarBloco(@PathVariable("id") Long id) {
+        blocoService.deletarBloco(id);
         return ResponseEntity.ok().body(
                 Map.of(
-                        "mensagem", "Conexão bem-sucedida! Usuário deletado com sucesso."
+                        "mensagem", "Conexão bem-sucedida! Bloco deletado com sucesso."
                 )
         );
     }

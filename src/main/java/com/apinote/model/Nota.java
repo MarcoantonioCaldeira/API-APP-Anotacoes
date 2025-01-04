@@ -1,8 +1,15 @@
 package com.apinote.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta. persistence. ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta. persistence. FetchType;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -19,16 +26,15 @@ public class Nota implements Serializable {
     private String titulo;
     private String descricao;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id_usuario")
+    @JoinColumn(name = "bloco_id", referencedColumnName = "id_bloco")
     @JsonBackReference
-    private Usuario usuario;
+    private Bloco bloco;
 
-    public Nota(String titulo, String descricao, Usuario usuario) {
+    public Nota(String titulo, String descricao, Bloco bloco) {
         this.titulo = titulo;
         this.descricao = descricao;
-        this.usuario = usuario;
+        this.bloco = bloco;
     }
 
     public Nota() {
@@ -61,12 +67,12 @@ public class Nota implements Serializable {
         this.descricao = descricao;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Bloco getBloco() {
+        return bloco;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setBloco(Bloco bloco) {
+        this.bloco = bloco;
     }
 
     @Override
