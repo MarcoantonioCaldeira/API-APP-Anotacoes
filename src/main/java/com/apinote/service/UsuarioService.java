@@ -18,12 +18,10 @@ public class UsuarioService {
 
     @Transactional
     public Usuario criarUsuario(Usuario usuario) {
-        Optional<Usuario> emailusuario = usuarioRepository.findByEmail(usuario.getEmail());
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(usuario.getEmail());
 
-        for(Usuario u : usuarioRepository.findAll()) {
-            if(u.getEmail().equals(usuario.getEmail())) {
-                throw new RuntimeException("Email já cadastrado");
-            }
+        if(usuarioOptional.isPresent()) {
+            throw new RuntimeException("Email já cadastrado");
         }
 
         return usuarioRepository.save(usuario);
