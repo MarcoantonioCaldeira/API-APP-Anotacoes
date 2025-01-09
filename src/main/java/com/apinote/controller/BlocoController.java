@@ -2,6 +2,8 @@ package com.apinote.controller;
 
 import com.apinote.model.Bloco;
 import com.apinote.model.Usuario;
+import com.apinote.model.dto.BlocoDTO;
+import com.apinote.model.dto.UsuarioDTO;
 import com.apinote.service.BlocoService;
 import com.apinote.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "rest/usuarios/bloco")
 public class BlocoController {
+
     @Autowired
     BlocoService blocoService;
 
@@ -35,15 +38,14 @@ public class BlocoController {
             String descricao = (String) payload.get("descricao");
             Long usuarioId = Long.valueOf((Integer) payload.get("usuario_id"));
 
-            Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+            UsuarioDTO usuario = usuarioService.buscarUsuarioPorId(usuarioId);
 
-            Bloco bloco = new Bloco();
+            BlocoDTO bloco = new BlocoDTO();
             bloco.setTitulo(titulo);
             bloco.setDescricao(descricao);
             bloco.setUsuario(usuario);
 
             Bloco blocoCriado = blocoService.criarBloco(bloco);
-
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     Map.of(
                             "mensagem", "Bloco criado com sucesso!",
@@ -62,7 +64,7 @@ public class BlocoController {
 
     @RequestMapping(value = "/atualizar/{id}",
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public  ResponseEntity<?> atualizarNota(@PathVariable Long id, @RequestBody Bloco bloco) {
+    public  ResponseEntity<?> atualizarNota(@PathVariable Long id, @RequestBody BlocoDTO bloco) {
         Bloco blocos = blocoService.atualizarBloco(id, bloco);
         return ResponseEntity.ok().body(
                 Map.of(

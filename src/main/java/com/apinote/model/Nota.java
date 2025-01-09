@@ -28,7 +28,7 @@ public class Nota implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bloco_id", referencedColumnName = "id_bloco")
-    @JsonBackReference
+    //@JsonBackReference
     private Bloco bloco;
 
     public Nota(String titulo, String descricao, Bloco bloco) {

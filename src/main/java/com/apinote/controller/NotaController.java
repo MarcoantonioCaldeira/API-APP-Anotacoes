@@ -2,6 +2,8 @@ package com.apinote.controller;
 
 import com.apinote.model.Bloco;
 import com.apinote.model.Nota;
+import com.apinote.model.dto.BlocoDTO;
+import com.apinote.model.dto.NotaDTO;
 import com.apinote.service.BlocoService;
 import com.apinote.service.NotaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +38,9 @@ public class NotaController {
             String descricao = (String) payload.get("descricao");
             Long blocoId = Long.valueOf((Integer) payload.get("bloco_id"));
 
-            Bloco bloco = blocoService.buscarBlocoPorId(blocoId);
+            BlocoDTO bloco = blocoService.buscarBlocoPorId(blocoId);
 
-            Nota nota = new Nota();
+            NotaDTO nota = new NotaDTO();
             nota.setTitulo(titulo);
             nota.setDescricao(descricao);
             nota.setBloco(bloco);

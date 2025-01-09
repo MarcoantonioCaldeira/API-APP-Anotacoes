@@ -31,7 +31,7 @@ public class Usuario implements Serializable {
     private String confirmacaoSenha;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    //@JsonManagedReference
     private Set<Bloco> blocos = new HashSet<>();
 
     public Usuario(String nome, String email, String senha, String confirmacaoSenha) {

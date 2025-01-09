@@ -1,6 +1,7 @@
 package com.apinote.controller;
 
 import com.apinote.model.Usuario;
+import com.apinote.model.dto.UsuarioDTO;
 import com.apinote.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,9 +28,8 @@ public class UsuarioController {
     @PostMapping(value = "/criar",
         consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
         produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public  ResponseEntity<Object> criarUsuario(@RequestBody Usuario usuario) {
+    public  ResponseEntity<Object> criarUsuario(@RequestBody UsuarioDTO usuario) {
         Usuario usuarioCriado  = usuarioService.criarUsuario(usuario);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 Map.of(
                         "mensagem", "Conexão bem-sucedida! Usuário criado com sucesso.",

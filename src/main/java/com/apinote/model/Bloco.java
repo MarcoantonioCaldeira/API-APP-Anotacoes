@@ -34,11 +34,11 @@ public class Bloco implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", referencedColumnName = "id_usuario")
-    @JsonBackReference
+    //@JsonBackReference
     private Usuario usuario;
 
     @OneToMany(mappedBy = "bloco", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    //@JsonManagedReference
     private Set<Nota> notas = new HashSet<>();
 
     public Bloco(Long id, String titulo, Usuario usuario, Set<Nota> notas) {

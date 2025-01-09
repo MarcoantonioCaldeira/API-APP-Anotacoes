@@ -2,9 +2,10 @@ package com.apinote.service;
 
 import com.apinote.model.Bloco;
 import com.apinote.model.Nota;
-import com.apinote.model.Usuario;
+import com.apinote.model.dto.NotaDTO;
 import com.apinote.model.repository.BlocoRepository;
 import com.apinote.model.repository.NotaRepository;
+import com.apinote.service.mapper.EntityConversor;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,12 @@ public class NotaService {
     @Autowired
     private BlocoRepository blocoRepository;
 
-    public Nota criarNota(Nota nota) {
+    @Autowired
+    EntityConversor entityConversor;
+
+    public Nota criarNota(NotaDTO notaDTO) {
+        Nota nota = entityConversor.parseObject(notaDTO, Nota.class);
+
         if (nota.getBloco() == null || nota.getBloco().getId() == null) {
             throw new IllegalArgumentException("O ID do bloco deve ser informado.");
         }
@@ -34,7 +40,6 @@ public class NotaService {
         return notaRepository.save(nota);
     }
 
-    @Transactional
     public Nota atualizarNota(Long id, Nota entity) {
         Nota notaAtualizada = notaRepository.findById(id).get();
         notaAtualizada.setTitulo(entity.getTitulo());
@@ -48,7 +53,6 @@ public class NotaService {
         return notas;
     }
 
-    @Transactional
     public void deletarNota(Long id) {
         try {
             notaRepository.deleteById(id);

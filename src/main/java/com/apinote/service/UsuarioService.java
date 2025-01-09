@@ -1,7 +1,9 @@
 package com.apinote.service;
 
 import com.apinote.model.Usuario;
+import com.apinote.model.dto.UsuarioDTO;
 import com.apinote.model.repository.UsuarioRepository;
+import com.apinote.service.mapper.EntityConversor;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,18 +18,21 @@ public class UsuarioService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    @Transactional
-    public Usuario criarUsuario(Usuario usuario) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(usuario.getEmail());
+    @Autowired
+    EntityConversor entityConversor;
+
+    public Usuario criarUsuario(UsuarioDTO usuario) {
+        Usuario usuarioSalvo = entityConversor.parseObject(usuario, Usuario.class);
+
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(usuarioSalvo.getEmail());
 
         if(usuarioOptional.isPresent()) {
             throw new RuntimeException("Email já cadastrado");
         }
 
-        return usuarioRepository.save(usuario);
+        return usuarioRepository.save(usuarioSalvo);
     }
 
-    @Transactional
     public void deletarUsuario(Long id) {
         try {
             usuarioRepository.deleteById(id);
@@ -36,13 +41,15 @@ public class UsuarioService {
         }
     }
 
+    @Transactional
     public List<Usuario> listarUsuario() {
         List<Usuario> usuarios = usuarioRepository.findAll();
         return usuarios;
     }
 
-    public Usuario buscarUsuarioPorId(Long id) {
-        return usuarioRepository.findById(id)
+    public UsuarioDTO buscarUsuarioPorId(Long id) {
+        Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + id));
+        return entityConversor.parseObject(usuario, UsuarioDTO.class);
     }
 }
