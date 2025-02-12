@@ -1,8 +1,8 @@
 package com.apinote.controller;
 
-import com.apinote.model.Bloco;
-import com.apinote.model.dto.BlocoDTO;
-import com.apinote.service.BlocoService;
+import com.apinote.model.Block;
+import com.apinote.model.dto.BlockDTO;
+import com.apinote.service.BlockService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,21 +19,21 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "rest/usuarios/bloco")
-public class BlocoController {
+public class BlockController {
 
     @Autowired
-    BlocoService blocoService;
+    BlockService blockService;
 
     @RequestMapping(value = "/criar")
-    public ResponseEntity<Bloco> criarBloco(@Valid @RequestBody BlocoDTO blocoDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(blocoService.criarBloco(blocoDTO));
+    public ResponseEntity<Block> criarBloco(@Valid @RequestBody BlockDTO blockDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(blockService.criarBloco(blockDTO));
     }
 
 
     @RequestMapping(value = "/atualizar/{id}",
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public  ResponseEntity<?> atualizarNota(@PathVariable Long id, @RequestBody BlocoDTO bloco) {
-        Bloco blocos = blocoService.atualizarBloco(id, bloco);
+    public  ResponseEntity<?> atualizarNota(@PathVariable Long id, @RequestBody BlockDTO bloco) {
+        Block blocos = blockService.atualizarBloco(id, bloco);
         return ResponseEntity.ok().body(
                 Map.of(
                         "mensagem", "Conexão bem-sucedida! Bloco atualizado com sucesso.",
@@ -44,13 +44,13 @@ public class BlocoController {
 
     @RequestMapping(value = "/listar",
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public List<Bloco> listarBlocos() {
-        return blocoService.listarBloco();
+    public List<Block> listarBlocos() {
+        return blockService.listarBloco();
     }
 
     @DeleteMapping(value = "/deletar/{id}")
     public ResponseEntity<?> deletarBloco(@PathVariable("id") Long id) {
-        blocoService.deletarBloco(id);
+        blockService.deletarBloco(id);
         return ResponseEntity.ok().body(
                 Map.of(
                         "mensagem", "Conexão bem-sucedida! Bloco deletado com sucesso."

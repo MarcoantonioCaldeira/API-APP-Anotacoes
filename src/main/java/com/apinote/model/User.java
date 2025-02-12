@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "usuario")
-public class Usuario implements Serializable {
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,16 +31,16 @@ public class Usuario implements Serializable {
     private String confirmacaoSenha;
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
-    private Set<Bloco> blocos = new HashSet<>();
+    private Set<Block> blocks = new HashSet<>();
 
-    public Usuario(String nome, String email, String senha, String confirmacaoSenha) {
+    public User(String nome, String email, String senha, String confirmacaoSenha) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.confirmacaoSenha = confirmacaoSenha;
     }
 
-    public Usuario(){
+    public User(){
 
     }
 
@@ -89,12 +89,12 @@ public class Usuario implements Serializable {
     }
 
     @Column(name = "blocos_usuario")
-    public Set<Bloco> getBlocos() {
-        return blocos;
+    public Set<Block> getBlocos() {
+        return blocks;
     }
 
-    public void setBlocos(Set<Bloco> blocos) {
-        this.blocos = blocos;
+    public void setBlocos(Set<Block> blocks) {
+        this.blocks = blocks;
     }
 
     @Override
@@ -111,7 +111,7 @@ public class Usuario implements Serializable {
 
             return false;
 
-        Usuario other = (Usuario) obj;
+        User other = (User) obj;
         return Objects.equals(id, other.id);
     }
 

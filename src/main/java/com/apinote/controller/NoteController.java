@@ -1,9 +1,8 @@
 package com.apinote.controller;
 
-import com.apinote.model.Nota;
-import com.apinote.model.dto.NotaDTO;
-import com.apinote.service.BlocoService;
-import com.apinote.service.NotaService;
+import com.apinote.model.Note;
+import com.apinote.model.dto.NoteDTO;
+import com.apinote.service.NoteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,21 +15,21 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "rest/nota")
-public class NotaController {
+public class NoteController {
 
     @Autowired
-    NotaService notaService;
+    NoteService noteService;
 
 
     @RequestMapping(value = "/criar")
-    public ResponseEntity<Nota> criarNota(@Valid @RequestBody NotaDTO notaDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(notaService.criarNota(notaDTO));
+    public ResponseEntity<Note> criarNota(@Valid @RequestBody NoteDTO noteDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(noteService.criarNota(noteDTO));
     }
 
     @RequestMapping(value = "/atualizar/{id}",
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public  ResponseEntity<?> atualizarNota(@PathVariable Long id, @RequestBody Nota nota) {
-        Nota notas = notaService.atualizarNota(id, nota);
+    public  ResponseEntity<?> atualizarNota(@PathVariable Long id, @RequestBody Note note) {
+        Note notas = noteService.atualizarNota(id, note);
         return ResponseEntity.ok().body(
                 Map.of(
                         "mensagem", "Conexão bem-sucedida! Nota atualizada com sucesso.",
@@ -41,13 +40,13 @@ public class NotaController {
 
     @RequestMapping(value = "/listar",
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public List<Nota> listarNotas() {
-        return notaService.listarNotas();
+    public List<Note> listarNotas() {
+        return noteService.listarNotas();
     }
 
     @DeleteMapping(value = "/deletar/{id}")
     public ResponseEntity<?> deletarNota(@PathVariable("id") Long id) {
-        notaService.deletarNota(id);
+        noteService.deletarNota(id);
         return ResponseEntity.ok().body(
                 Map.of(
                         "mensagem", "Conexão bem-sucedida! Usuário deletado com sucesso."

@@ -3,19 +3,19 @@ package com.apinote.model.dto;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
-public class UsuarioDTO {
+public class UserDTO {
     private String nome;
     private String email;
     private String senha;
     private String confirmacaoSenha;
 
-    public List<BlocoDTO> getBloco() {
+    public List<BlockDTO> getBloco() {
         return bloco;
     }
 
-    private List<BlocoDTO> bloco;
+    private List<BlockDTO> bloco;
 
-    public UsuarioDTO(String nome, String email, String senha, String confirmacaoSenha, List<BlocoDTO> bloco) {
+    public UserDTO(String nome, String email, String senha, String confirmacaoSenha, List<BlockDTO> bloco) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
@@ -23,7 +23,7 @@ public class UsuarioDTO {
         this.bloco = bloco;
     }
 
-    public UsuarioDTO() {
+    public UserDTO() {
     }
 
     @NotBlank(message = "O nome do usuario é obrigatório.")

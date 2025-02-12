@@ -1,18 +1,17 @@
 package com.apinote.model.dto;
-import com.apinote.model.Bloco;
 
-public class BlocoDTO {
+public class BlockDTO {
     private String titulo;
     private String descricao;
     private Long usuarioId;
 
-    public BlocoDTO(String titulo, String descricao, Long usuarioId) {
+    public BlockDTO(String titulo, String descricao, Long usuarioId) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.usuarioId = usuarioId;
     }
 
-    public BlocoDTO(){}
+    public BlockDTO(){}
 
     public String getTitulo() {
         return titulo;

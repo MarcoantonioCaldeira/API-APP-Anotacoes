@@ -2,18 +2,18 @@ package com.apinote.model.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class NotaDTO {
+public class NoteDTO {
     private String titulo;
     private String descricao;
     private Long blocoId;
 
-    public NotaDTO(String titulo, String descricao, Long blocoId) {
+    public NoteDTO(String titulo, String descricao, Long blocoId) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.blocoId = blocoId;
     }
 
-    public NotaDTO() {
+    public NoteDTO() {
     }
 
     @NotBlank(message = "O titulo é obrigatorio")

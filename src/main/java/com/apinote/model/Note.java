@@ -1,45 +1,42 @@
 package com.apinote.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta. persistence. ManyToOne;
+import jakarta.persistence.JoinColumn;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
-@Table(name="bloco")
-public class Bloco implements Serializable {
+@Table(name = "nota")
+public class Note implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_bloco")
+    @Column(name = "id_nota")
     private Long id;
     private String titulo;
     private String descricao;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id_usuario")
+    @JoinColumn(name = "bloco_id", referencedColumnName = "id_bloco")
     @JsonBackReference
-    private Usuario usuario;
+    private Block block;
 
-    @OneToMany(mappedBy = "bloco", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private Set<Nota> notas = new HashSet<>();
-
-    public Bloco(Long id, String titulo, String descricao, Usuario usuario, Set<Nota> notas) {
-        this.id = id;
+    public Note(String titulo, String descricao, Block block) {
         this.titulo = titulo;
         this.descricao = descricao;
-        this.usuario = usuario;
-        this.notas = notas;
+        this.block = block;
     }
 
-    public Bloco() {
+    public Note() {
 
     }
 
@@ -51,7 +48,7 @@ public class Bloco implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "titulo_bloco")
+    @Column(name = "titulo_nota")
     public String getTitulo() {
         return titulo;
     }
@@ -60,7 +57,7 @@ public class Bloco implements Serializable {
         this.titulo = titulo;
     }
 
-    @Column(name = "descricao_bloco")
+    @Column(name = "descricao_nota")
     public String getDescricao() {
         return descricao;
     }
@@ -69,21 +66,12 @@ public class Bloco implements Serializable {
         this.descricao = descricao;
     }
 
-    public Set<Nota> getNotas() {
-        return notas;
+    public Block getBloco() {
+        return block;
     }
 
-    public void setNotas(Set<Nota> notas) {
-        this.notas = notas;
-    }
-
-    @Column(name = "notas_bloco")
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setBloco(Block block) {
+        this.block = block;
     }
 
     @Override
@@ -100,7 +88,7 @@ public class Bloco implements Serializable {
 
             return false;
 
-        Bloco other = (Bloco) obj;
+        Note other = (Note) obj;
         return Objects.equals(id, other.id);
     }
 
