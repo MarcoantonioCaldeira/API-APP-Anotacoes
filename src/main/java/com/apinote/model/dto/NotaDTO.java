@@ -1,57 +1,34 @@
 package com.apinote.model.dto;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class NotaDTO {
-    private Long id;
     private String titulo;
     private String descricao;
-    private BlocoDTO bloco;
+    private Long blocoId;
 
-    public NotaDTO(Long id, String titulo, String descricao, BlocoDTO bloco) {
-        this.id = id;
+    public NotaDTO(String titulo, String descricao, Long blocoId) {
         this.titulo = titulo;
         this.descricao = descricao;
-        this.bloco = bloco;
+        this.blocoId = blocoId;
     }
 
     public NotaDTO() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @NotBlank(message = "O titulo é obrigatorio")
-    @NotNull(message = "O titulo é obrigatorio")
     public String getTitulo() {
         return titulo;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    @NotBlank(message = "A descrição é obrigatoria")
-    @NotNull(message = "A descrição é obrigatoria")
+    @NotBlank(message = "A descrição é obrigatorio")
     public String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    @NotNull(message = "O id do bloco referente é obrigatorio")
+    public Long getBlocoId() {
+        return blocoId;
     }
 
-    public BlocoDTO getBloco() {
-        return bloco;
-    }
-
-    public void setBloco(BlocoDTO bloco) {
-        this.bloco = bloco;
-    }
 }

@@ -1,11 +1,9 @@
 package com.apinote.controller;
 
 import com.apinote.model.Bloco;
-import com.apinote.model.Usuario;
 import com.apinote.model.dto.BlocoDTO;
-import com.apinote.model.dto.UsuarioDTO;
 import com.apinote.service.BlocoService;
-import com.apinote.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,39 +24,9 @@ public class BlocoController {
     @Autowired
     BlocoService blocoService;
 
-    @Autowired
-    UsuarioService usuarioService;
-
-    @RequestMapping(value = "/criar",
-            consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public ResponseEntity<Object> criarBloco(@RequestBody Map<String, Object> payload) {
-        try {
-            String titulo = (String) payload.get("titulo");
-            String descricao = (String) payload.get("descricao");
-            Long usuarioId = Long.valueOf((Integer) payload.get("usuario_id"));
-
-            UsuarioDTO usuario = usuarioService.buscarUsuarioPorId(usuarioId);
-
-            BlocoDTO bloco = new BlocoDTO();
-            bloco.setTitulo(titulo);
-            bloco.setDescricao(descricao);
-            bloco.setUsuario(usuario);
-
-            Bloco blocoCriado = blocoService.criarBloco(bloco);
-            return ResponseEntity.status(HttpStatus.CREATED).body(
-                    Map.of(
-                            "mensagem", "Bloco criado com sucesso!",
-                            "dados", blocoCriado
-                    )
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    Map.of(
-                            "erro", "Erro ao criar a bloco: " + e.getMessage()
-                    )
-            );
-        }
+    @RequestMapping(value = "/criar")
+    public ResponseEntity<Bloco> criarBloco(@Valid @RequestBody BlocoDTO blocoDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(blocoService.criarBloco(blocoDTO));
     }
 
 

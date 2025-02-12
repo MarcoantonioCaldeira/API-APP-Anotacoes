@@ -1,15 +1,13 @@
 package com.apinote.model;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.CascadeType;
-
+import jakarta.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.FetchType;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -22,16 +20,17 @@ public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_usuario")
     private Long id;
     private String nome;
     private String email;
     private String senha;
+
+    @Transient
     private String confirmacaoSenha;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JsonManagedReference
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private Set<Bloco> blocos = new HashSet<>();
 
     public Usuario(String nome, String email, String senha, String confirmacaoSenha) {

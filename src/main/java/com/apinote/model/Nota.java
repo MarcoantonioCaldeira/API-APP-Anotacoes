@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta. persistence. ManyToOne;
 import jakarta.persistence.JoinColumn;
-import jakarta. persistence. FetchType;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -20,15 +19,15 @@ public class Nota implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_nota")
     private Long id;
     private String titulo;
     private String descricao;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "bloco_id", referencedColumnName = "id_bloco")
-    //@JsonBackReference
+    @JsonBackReference
     private Bloco bloco;
 
     public Nota(String titulo, String descricao, Bloco bloco) {

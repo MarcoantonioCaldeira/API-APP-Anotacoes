@@ -1,19 +1,9 @@
 package com.apinote.model;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.CascadeType;
-import jakarta. persistence. ManyToOne;
-import jakarta.persistence.JoinColumn;
-import jakarta. persistence. FetchType;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -26,24 +16,25 @@ public class Bloco implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_bloco")
     private Long id;
     private String titulo;
     private String descricao;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "usuario_id", referencedColumnName = "id_usuario")
-    //@JsonBackReference
+    @JsonBackReference
     private Usuario usuario;
 
     @OneToMany(mappedBy = "bloco", cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JsonManagedReference
+    @JsonManagedReference
     private Set<Nota> notas = new HashSet<>();
 
-    public Bloco(Long id, String titulo, Usuario usuario, Set<Nota> notas) {
+    public Bloco(Long id, String titulo, String descricao, Usuario usuario, Set<Nota> notas) {
         this.id = id;
         this.titulo = titulo;
+        this.descricao = descricao;
         this.usuario = usuario;
         this.notas = notas;
     }
@@ -52,7 +43,6 @@ public class Bloco implements Serializable {
 
     }
 
-    @Column(name = "id_bloco")
     public Long getId() {
         return id;
     }
