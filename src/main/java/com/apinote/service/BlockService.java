@@ -27,41 +27,41 @@ public class BlockService {
     EntityConversor entityConversor;
 
     @Transactional
-    public Block criarBloco(BlockDTO blockDTO) {
+    public Block createBlock(BlockDTO blockDTO) {
 
-        User user = userRepository.findById(blockDTO.getUsuarioId())
+        User user = userRepository.findById(blockDTO.userId())
                 .orElseThrow(() -> new UserNotFoundException("Usuario não encontrado"));
 
         Block block = new Block();
-        block.setTitulo(blockDTO.getTitulo());
-        block.setDescricao(blockDTO.getDescricao());
-        block.setUsuario(user);
+        block.setTitle(blockDTO.title());
+        block.setDescription(blockDTO.description());
+        block.setUser(user);
 
         return blockRepository.save(block);
     }
 
 
-    public Block atualizarBloco(Long id, BlockDTO entity) {
-        Block blockAtualizado = entityConversor.parseObject(blockRepository.findById(id).get(), Block.class);
-        blockAtualizado.setTitulo(entity.getTitulo());
-        blockAtualizado.setDescricao(entity.getDescricao());
+    public Block updateBlock(Long id, BlockDTO entity) {
+        Block blockAtualizado = entityConversor.parseObject(blockRepository.findById(id), Block.class);
+        blockAtualizado.setTitle(entity.title());
+        blockAtualizado.setDescription(entity.description());
         blockAtualizado = blockRepository.saveAndFlush(blockAtualizado);
         return blockAtualizado;
     }
 
-    public List<Block> listarBloco() {
+    public List<Block> listBlock() {
         List<Block> blocks = blockRepository.findAll();
         return blocks;
     }
 
 
-    public void deletarBloco(Long id) {
+    public void deleteBlock(Long id) {
         Block block = blockRepository.findById(id)
                 .orElseThrow(() -> new BlockNotFoundException("Bloco não encontrado com o : " + id));
         blockRepository.deleteById(id);
     }
 
-    public BlockDTO buscarBlocoPorId(Long id) {
+    public BlockDTO searchBlockById(Long id) {
         Block block = blockRepository.findById(id)
                 .orElseThrow(() -> new BlockNotFoundException("Bloco não encontrado com o ID: " + id));
         return entityConversor.parseObject(block, BlockDTO.class);

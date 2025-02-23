@@ -19,28 +19,28 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping( value = "rest/usuario")
+@RequestMapping( value = "rest/user")
 public class UserController {
 
     @Autowired
     UserService userService;
 
-    @PostMapping(value = "/criar",
+    @PostMapping(value = "/create",
         consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
         produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public  ResponseEntity<Object> criarUsuario(@RequestBody UserDTO usuario) {
-        User userCriado = userService.criarUsuario(usuario);
+    public  ResponseEntity<Object> createUser(@RequestBody UserDTO userDTO) {
+        User userCreated = userService.createUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 Map.of(
                         "mensagem", "Conexão bem-sucedida! Usuário criado com sucesso.",
-                        "dados", userCriado
+                        "dados", userCreated
                 )
         );
     }
 
-    @DeleteMapping(value = "/deletar/{id}")
-    public ResponseEntity<?> deletarUsuario(@PathVariable("id") Long id) {
-        userService.deletarUsuario(id);
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
+        userService.deleteUser(id);
         return ResponseEntity.ok().body(
                 Map.of(
                         "mensagem", "Conexão bem-sucedida! Usuário deletado com sucesso."
@@ -48,9 +48,9 @@ public class UserController {
         );
     }
 
-    @GetMapping(value = "/listar",
+    @GetMapping(value = "/list",
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public List<User> listarUsuario() {
-        return userService.listarUsuario();
+    public List<User> listUser() {
+        return userService.listUser();
     }
 }

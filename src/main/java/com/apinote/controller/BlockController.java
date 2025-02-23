@@ -18,39 +18,39 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "rest/usuarios/bloco")
+@RequestMapping(value = "rest/user/block")
 public class BlockController {
 
     @Autowired
     BlockService blockService;
 
-    @RequestMapping(value = "/criar")
-    public ResponseEntity<Block> criarBloco(@Valid @RequestBody BlockDTO blockDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(blockService.criarBloco(blockDTO));
+    @RequestMapping(value = "/create")
+    public ResponseEntity<Block> createBlock(@Valid @RequestBody BlockDTO blockDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(blockService.createBlock(blockDTO));
     }
 
 
-    @RequestMapping(value = "/atualizar/{id}",
+    @RequestMapping(value = "/update/{id}",
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public  ResponseEntity<?> atualizarNota(@PathVariable Long id, @RequestBody BlockDTO bloco) {
-        Block blocos = blockService.atualizarBloco(id, bloco);
+    public  ResponseEntity<?> updateBlock(@PathVariable Long id, @RequestBody BlockDTO blockDTO) {
+        Block blocks = blockService.updateBlock(id, blockDTO);
         return ResponseEntity.ok().body(
                 Map.of(
                         "mensagem", "Conexão bem-sucedida! Bloco atualizado com sucesso.",
-                        "dados", blocos
+                        "dados", blocks
                 )
         );
     }
 
-    @RequestMapping(value = "/listar",
+    @RequestMapping(value = "/list",
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public List<Block> listarBlocos() {
-        return blockService.listarBloco();
+    public List<Block> listBlocks() {
+        return blockService.listBlock();
     }
 
-    @DeleteMapping(value = "/deletar/{id}")
-    public ResponseEntity<?> deletarBloco(@PathVariable("id") Long id) {
-        blockService.deletarBloco(id);
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity<?> deleteBlock(@PathVariable("id") Long id) {
+        blockService.deleteBlock(id);
         return ResponseEntity.ok().body(
                 Map.of(
                         "mensagem", "Conexão bem-sucedida! Bloco deletado com sucesso."

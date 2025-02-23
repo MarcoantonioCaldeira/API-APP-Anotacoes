@@ -2,6 +2,7 @@ package com.apinote.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -10,31 +11,30 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name="bloco")
+@Table(name="block")
 public class Block implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_bloco")
+    @Column(name = "id_block")
     private Long id;
-    private String titulo;
-    private String descricao;
+    private String title;
+    private String description;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id_usuario")
-    @JsonBackReference
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "bloco", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "block")
     private Set<Note> notes = new HashSet<>();
 
-    public Block(Long id, String titulo, String descricao, User user, Set<Note> notes) {
+    public Block(Long id, String title, String description, User user, Set<Note> notes) {
         this.id = id;
-        this.titulo = titulo;
-        this.descricao = descricao;
+        this.title = title;
+        this.description = description;
         this.user = user;
         this.notes = notes;
     }
@@ -51,38 +51,38 @@ public class Block implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "titulo_bloco")
-    public String getTitulo() {
-        return titulo;
+    @Column(name = "title_block")
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    @Column(name = "descricao_bloco")
-    public String getDescricao() {
-        return descricao;
+    @Column(name = "description_block")
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Set<Note> getNotas() {
+    public Set<Note> getNotes() {
         return notes;
     }
 
-    public void setNotas(Set<Note> notes) {
+    public void setNotes(Set<Note> notes) {
         this.notes = notes;
     }
 
-    @Column(name = "notas_bloco")
-    public User getUsuario() {
+    @Column(name = "notes_block")
+    public User getUser() {
         return user;
     }
 
-    public void setUsuario(User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

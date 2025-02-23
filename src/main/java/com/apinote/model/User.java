@@ -1,4 +1,5 @@
 package com.apinote.model;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,30 +15,31 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "tb_user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_usuario")
+    @Column(name = "id_user")
     private Long id;
-    private String nome;
+    private String name;
     private String email;
-    private String senha;
+    private String password;
 
     @Transient
-    private String confirmacaoSenha;
+    private String confirmPassword;
 
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "user")
     private Set<Block> blocks = new HashSet<>();
 
-    public User(String nome, String email, String senha, String confirmacaoSenha) {
-        this.nome = nome;
+    public User(String name, String email, String password, String confirmPassword) {
+        this.name = name;
         this.email = email;
-        this.senha = senha;
-        this.confirmacaoSenha = confirmacaoSenha;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
     }
 
     public User(){
@@ -52,13 +54,13 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "nome_usuario", nullable = false)
-    public String getNome() {
-        return nome;
+    @Column(name = "name", nullable = false)
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Column(name = "email", nullable = false)
@@ -70,30 +72,30 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    @Column(name = "senha_usuario", nullable = false)
-    public String getSenha() {
-        return senha;
+    @Column(name = "password", nullable = false)
+    public String getPassword() {
+        return password;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    @Column(name = "confirmar_senha_usuario", nullable = false)
-    public String getConfirmacaoSenha() {
-        return confirmacaoSenha;
+    @Column(name = "confirmpassword", nullable = false)
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setConfirmacaoSenha(String confirmacaoSenha) {
-        this.confirmacaoSenha = confirmacaoSenha;
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
-    @Column(name = "blocos_usuario")
-    public Set<Block> getBlocos() {
+    @Column(name = "userblocks")
+    public Set<Block> getBlocks() {
         return blocks;
     }
 
-    public void setBlocos(Set<Block> blocks) {
+    public void setBlocks(Set<Block> blocks) {
         this.blocks = blocks;
     }
 

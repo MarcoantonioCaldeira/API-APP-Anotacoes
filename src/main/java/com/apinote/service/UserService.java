@@ -23,28 +23,37 @@ public class UserService {
 
 
     @Transactional
-    public User criarUsuario(UserDTO usuario) {
+    public User createUser(UserDTO userDTO) {
 
-        if(userRepository.findByEmail(usuario.getEmail()).isPresent()) {
+        if(userRepository.findByEmail(userDTO.email()).isPresent()) {
             throw new EmailAlreadyExistisExceptions("Email já cadastrado");
         }
 
-        User userSalvo = entityConversor.parseObject(usuario, User.class);
-        return userRepository.save(userSalvo);
+        var user = new User();
+        user.setName(userDTO.name());
+        user.setEmail(userDTO.email());
+        user.setPassword(userDTO.password());
+        user.setConfirmPassword(userDTO.confirmPassword());
+
+        if(!userDTO.password().equals(userDTO.confirmPassword())) {
+            throw new IllegalArgumentException("Senhas não conferem");
+        }
+
+        return userRepository.save(user);
     }
 
-    public void deletarUsuario(Long id) {
+    public void deleteUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado com o ID: " + id));
         userRepository.deleteById(id);
     }
 
-    public List<User> listarUsuario() {
+    public List<User> listUser() {
         List<User> users = userRepository.findAll();
         return users;
     }
 
-    public UserDTO buscarUsuarioPorId(Long id) {
+    public UserDTO searchUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado com o ID: " + id));
         return entityConversor.parseObject(user, UserDTO.class);

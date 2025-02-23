@@ -1,6 +1,7 @@
 package com.apinote.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -20,19 +21,19 @@ public class Note implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_nota")
+    @Column(name = "id_note")
     private Long id;
-    private String titulo;
-    private String descricao;
+    private String title;
+    private String description;
 
     @ManyToOne
-    @JoinColumn(name = "bloco_id", referencedColumnName = "id_bloco")
-    @JsonBackReference
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JoinColumn(name = "block_id", referencedColumnName = "id_block")
     private Block block;
 
-    public Note(String titulo, String descricao, Block block) {
-        this.titulo = titulo;
-        this.descricao = descricao;
+    public Note(String title, String description, Block block) {
+        this.title = title;
+        this.description = description;
         this.block = block;
     }
 
@@ -48,29 +49,29 @@ public class Note implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "titulo_nota")
-    public String getTitulo() {
-        return titulo;
+    @Column(name = "title_note")
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    @Column(name = "descricao_nota")
-    public String getDescricao() {
-        return descricao;
+    @Column(name = "description_note")
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Block getBloco() {
+    public Block getBlock() {
         return block;
     }
 
-    public void setBloco(Block block) {
+    public void setBlock(Block block) {
         this.block = block;
     }
 

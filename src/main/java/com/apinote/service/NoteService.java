@@ -27,33 +27,33 @@ public class NoteService {
     EntityConversor entityConversor;
 
     @Transactional
-    public Note criarNota(NoteDTO noteDTO) {
+    public Note createNote(NoteDTO noteDTO) {
 
-        Block block = blockRepository.findById(noteDTO.getBlocoId())
+        Block block = blockRepository.findById(noteDTO.blockId())
                 .orElseThrow(() -> new BlockNotFoundException("Bloco não encontrado"));
 
         Note note = new Note();
-        note.setTitulo(noteDTO.getTitulo());
-        note.setDescricao(noteDTO.getDescricao());
-        note.setBloco(block);
+        note.setTitle(noteDTO.title());
+        note.setDescription(noteDTO.description());
+        note.setBlock(block);
 
         return noteRepository.save(note);
     }
 
-    public Note atualizarNota(Long id, Note entity) {
-        Note noteAtualizada = noteRepository.findById(id).get();
-        noteAtualizada.setTitulo(entity.getTitulo());
-        noteAtualizada.setDescricao(entity.getDescricao());
+    public Note updateNote(Long id, NoteDTO noteDTO) {
+        Note noteAtualizada = entityConversor.parseObject(noteRepository.findById(id), Note.class);
+        noteAtualizada.setTitle(noteDTO.title());
+        noteAtualizada.setDescription(noteDTO.description());
         noteAtualizada = noteRepository.saveAndFlush(noteAtualizada);
         return noteAtualizada;
     }
 
-    public List<Note> listarNotas() {
+    public List<Note> listNotes() {
         List<Note> notes = noteRepository.findAll();
         return notes;
     }
 
-    public void deletarNota(Long id) {
+    public void deleteNota(Long id) {
         Note note = noteRepository.findById(id)
            .orElseThrow(() -> new NoteNotFoundException("Nota não encontrada com o : " + id));
         noteRepository.deleteById(id);
