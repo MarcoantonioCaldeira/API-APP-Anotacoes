@@ -1,47 +1,36 @@
 package com.apinote.controller;
-
-import com.apinote.model.Login;
-import com.apinote.service.security.JwtService;
-import org.springframework.http.HttpStatus;
+import com.apinote.model.User;
+import com.apinote.model.dto.AuthenticationDTO;
+import com.apinote.model.dto.LoginDTO;
+import com.apinote.service.security.TokenService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("rest/user")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtService jwtService) {
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-    }
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/login")
-    public String login(@RequestBody Login request) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getName(), request.getPassword())
-            );
+    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
 
-            List<String> roles = authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .toList();
+        var token = tokenService.generateToken((User) auth.getPrincipal());
 
-            return jwtService.createToken(request.getName(), roles);
-        } catch (Exception e) {
-            System.err.println("Erro de autenticação: " + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciais inválidas");
-        }
+        return ResponseEntity.ok(new LoginDTO(token));
     }
 }
