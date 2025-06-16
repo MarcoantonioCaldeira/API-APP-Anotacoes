@@ -6,6 +6,9 @@ import org.yaml.snakeyaml.events.Event;
 
 import java.util.List;
 
-public interface BlockService extends GenericService {
-
+public interface BlockService {
+    public Block createBlock(BlockDTO blockDTO);
+    public Block updateBlock(Long id, BlockDTO entity);
+    public void deleteBlock(Long id);
+    public List<Block> listBlockByUser(Long idUser);
 }

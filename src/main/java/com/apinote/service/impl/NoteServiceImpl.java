@@ -5,18 +5,17 @@ import com.apinote.model.Note;
 import com.apinote.model.dto.NoteDTO;
 import com.apinote.model.repository.BlockRepository;
 import com.apinote.model.repository.NoteRepository;
+import com.apinote.service.NoteService;
 import com.apinote.service.exceptions.BlockNotFoundException;
 import com.apinote.service.exceptions.NoteNotFoundException;
 import com.apinote.service.mapper.EntityConversor;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 import java.util.List;
 
 @Service
-public class NoteServiceImpl {
+public class NoteServiceImpl implements NoteService {
 
     @Autowired
     NoteRepository noteRepository;
@@ -28,7 +27,7 @@ public class NoteServiceImpl {
     EntityConversor entityConversor;
 
     @Transactional
-    public Note createNote(NoteDTO noteDTO) {
+    public Note save(NoteDTO noteDTO) {
 
         Block block = blockRepository.findById(noteDTO.blockId())
                 .orElseThrow(() -> new BlockNotFoundException("Bloco não encontrado"));
@@ -41,7 +40,7 @@ public class NoteServiceImpl {
         return noteRepository.save(note);
     }
 
-    public Note updateNote(Long id, NoteDTO noteDTO) {
+    public Note update(Long id, NoteDTO noteDTO) {
         Note noteAtualizada = entityConversor.parseObject(noteRepository.findById(id), Note.class);
         noteAtualizada.setTitle(noteDTO.title());
         noteAtualizada.setDescription(noteDTO.description());
@@ -49,7 +48,7 @@ public class NoteServiceImpl {
         return noteAtualizada;
     }
 
-    public List<Note> listNotes() {
+    public List<Note> list() {
         List<Note> notes = noteRepository.findAll();
         return notes;
     }
@@ -60,9 +59,10 @@ public class NoteServiceImpl {
         return noteRepository.findByBlock(idBlock);
     }
 
-    public void deleteNota(Long id) {
+    public void delete(Long id) {
         Note note = noteRepository.findById(id)
            .orElseThrow(() -> new NoteNotFoundException("Nota não encontrada com o : " + id));
         noteRepository.deleteById(id);
     }
+
 }

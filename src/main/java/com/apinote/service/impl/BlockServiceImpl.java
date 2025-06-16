@@ -5,6 +5,7 @@ import com.apinote.model.User;
 import com.apinote.model.dto.BlockDTO;
 import com.apinote.model.repository.BlockRepository;
 import com.apinote.model.repository.UserRepository;
+import com.apinote.service.BlockService;
 import com.apinote.service.exceptions.BlockNotFoundException;
 import com.apinote.service.exceptions.UserNotFoundException;
 import com.apinote.service.mapper.EntityConversor;
@@ -16,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class BlockServiceImpl {
+public class BlockServiceImpl implements BlockService {
 
     @Autowired
     BlockRepository blockRepository;

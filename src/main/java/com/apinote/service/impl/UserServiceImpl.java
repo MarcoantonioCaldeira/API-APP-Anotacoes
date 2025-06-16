@@ -4,7 +4,6 @@ import com.apinote.model.User;
 import com.apinote.model.dto.UserDTO;
 import com.apinote.model.repository.UserRepository;
 import com.apinote.service.UserService;
-import com.apinote.service.exceptions.EmailAlreadyExistisExceptions;
 import com.apinote.service.exceptions.UserNotFoundException;
 import com.apinote.service.mapper.EntityConversor;
 import jakarta.transaction.Transactional;
@@ -13,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,10 +27,6 @@ public class UserServiceImpl implements UserService {
     public User save(UserDTO userDTO) {
         if (userRepository.findByLogin(userDTO.login()) != null) {
             throw new UserNotFoundException("Login já cadastrado");
-        }
-
-        if (userRepository.findByEmail(userDTO.email()).isPresent()) {
-            throw new EmailAlreadyExistisExceptions("Email já cadastrado");
         }
 
         if (!userDTO.password().equals(userDTO.confirmPassword())) {
@@ -53,25 +47,12 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-
-    public List<User> listAll() {
-        List<User> users = userRepository.findAll();
-        return users;
-    }
-
-    public User read(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado com o ID: " + id));
-    }
-
     public User listById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado com o ID: " + id));
         return user;
     }
 
-
-    @Override
     public User update(Long id, UserDTO entity) {
         User userUpdated = entityConversor.parseObject(userRepository.findById(id), User.class);
         userUpdated.setName(entity.name());

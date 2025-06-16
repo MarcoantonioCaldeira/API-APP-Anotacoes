@@ -1,4 +1,4 @@
-package com.apinote.controller;
+package com.apinote.web.controller;
 import com.apinote.model.User;
 import com.apinote.model.dto.AuthenticationDTO;
 import com.apinote.model.dto.LoginDTO;
