@@ -5,7 +5,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    # CORRIGIDO: Mapeando a porta 5050 do host para a porta 5050 do contêiner da sua aplicação
     ports:
       - "5050:5050"
     environment:
@@ -24,7 +23,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgre
     ports:
-      - "5432:5432" # Opcional, apenas se precisar acessar o DB diretamente de fora do Docker
+      - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
 
@@ -34,7 +33,6 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: root
       PGADMIN_LISTEN_PORT: 80
-    # CORRIGIDO: Mapeando a porta 5051 do host para a porta 80 do contêiner pgAdmin
     ports:
       - "5051:80"
     depends_on:
