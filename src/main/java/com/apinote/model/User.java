@@ -1,28 +1,16 @@
 package com.apinote.model;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import java.io.Serializable;
+
 import java.util.*;
 
 @Entity
 @Table(name = "tb_user")
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(of = "id")
 public class User implements UserDetails {
 
     private static final long serialVersionUID = 1L;
@@ -31,24 +19,24 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private String login;
     private String email;
     private String password;
     private UserRole role;
 
     @Transient
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String confirmPassword;
 
     @OneToMany(mappedBy = "user")
     private Set<Block> blocks = new HashSet<>();
 
-    public User(String name, String login, String email, String password, UserRole role, String confirmPassword, Set<Block> blocks) {
+    public User() {}
+
+    public User(String name, String email, String password, UserRole role, Set<Block> blocks) {
         this.name = name;
-        this.login = login;
         this.email = email;
         this.password = password;
         this.role = role;
-        this.confirmPassword = confirmPassword;
         this.blocks = blocks;
     }
 
@@ -62,29 +50,17 @@ public class User implements UserDetails {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
 
     @Override
     public String getUsername() {
-        return login;
+        return email;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public String getEmail() {
@@ -130,46 +106,14 @@ public class User implements UserDetails {
 
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-
-            return true;
-
-        if (obj == null)
-
-            return false;
-
-        if (getClass() != obj.getClass())
-
-            return false;
-
-        User other = (User) obj;
-        return Objects.equals(id, other.id);
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hashCode(id);
     }
-
 }

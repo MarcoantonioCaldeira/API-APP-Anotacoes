@@ -11,4 +11,7 @@ public interface UserService {
     void delete(Long id);
     User listById(Long id);
     User update(Long id, UserDTO entity);
+    List<User> listUsers();
+    User promoveToAdmin(Long userId);
+    User demoteToUser(Long userId);
 }

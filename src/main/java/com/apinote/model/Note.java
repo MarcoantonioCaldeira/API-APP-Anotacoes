@@ -1,6 +1,4 @@
 package com.apinote.model;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,11 +8,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta. persistence. ManyToOne;
 import jakarta.persistence.JoinColumn;
+import lombok.EqualsAndHashCode;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(name = "nota")
+@EqualsAndHashCode(of = "id")
 public class Note implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -73,28 +72,5 @@ public class Note implements Serializable {
 
     public void setBlock(Block block) {
         this.block = block;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-
-            return true;
-
-        if (obj == null)
-
-            return false;
-
-        if (getClass() != obj.getClass())
-
-            return false;
-
-        Note other = (Note) obj;
-        return Objects.equals(id, other.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }
