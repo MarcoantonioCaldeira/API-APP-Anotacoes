@@ -10,9 +10,6 @@ jobs:
   build:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: API_APP_Note
 
     steps:
       - name: Checkout repository
@@ -31,10 +28,10 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ github.repository_owner }}/appnote:latest .
+        run: docker build -t ghcr.io/${{ github.repository_owner }}/api-app-anotacoes:latest .
 
       - name: Push Docker image
-        run: docker push ghcr.io/${{ github.repository_owner }}/appnote:latest
+        run: docker push ghcr.io/${{ github.repository_owner }}/api-app-anotacoes:latest
 
   deploy:
     name: Deploy to AWS EC2
@@ -49,9 +46,10 @@ jobs:
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.AWS_KEY }}
           script: |
-            echo "Atualizando container appnote..."
-            docker pull ghcr.io/${{ github.repository_owner }}/appnote:latest
-            docker stop appnote || true
-            docker rm appnote || true
-            docker run -d --name appnote -p 8080:8080 ghcr.io/${{ github.repository_owner }}/appnote:latest
+            echo "Atualizando container api-app-anotacoes..."
+            docker pull ghcr.io/${{ github.repository_owner }}/api-app-anotacoes:latest
+            docker stop api-app-anotacoes || true
+            docker rm api-app-anotacoes || true
+            docker run -d --name api-app-anotacoes -p 8080:8080 ghcr.io/${{ github.repository_owner }}/api-app-anotacoes:latest
             echo "Deploy concluído com sucesso!"
+
