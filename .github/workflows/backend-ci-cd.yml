@@ -49,7 +49,7 @@ jobs:
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.AWS_KEY }}
           script: |
-            echo "🔁 Atualizando container appnote..."
+            echo "Atualizando container appnote..."
             docker pull ghcr.io/${{ github.repository_owner }}/appnote:latest
             docker stop appnote || true
             docker rm appnote || true
